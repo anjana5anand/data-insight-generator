@@ -59,6 +59,20 @@ def find_sensitive(df):
 
 def calc_stats(df, numeric_cols, cat_cols):
     """Calculate all statistics"""
+    # Filter out ID-like columns (high cardinality, sequential, or contain 'id' in name)
+    filtered_numeric = []
+    for col in numeric_cols:
+        # Skip if column name contains 'id', 'code', 'number', 'num'
+        if any(term in col.lower() for term in ['id', 'code', 'number', 'num', 'naics']):
+            continue
+        # Skip if nearly all unique (likely an ID)
+        if df[col].nunique() / len(df) > 0.95:
+            continue
+        filtered_numeric.append(col)
+    
+    # Use filtered columns for stats
+    numeric_cols = filtered_numeric
+    
     # Numeric stats
     num_stats = []
     for col in numeric_cols:
@@ -83,7 +97,7 @@ def calc_stats(df, numeric_cols, cat_cols):
         for val, cnt in df[col].value_counts(dropna=False).items():
             cat_stats.append({'column': col, 'value': val, 'count': cnt, 'percent': cnt/len(df)*100})
     
-    return pd.DataFrame(num_stats), pd.DataFrame(cat_stats)
+    return pd.DataFrame(num_stats), pd.DataFrame(cat_stats), numeric_cols
 
 def generate_insights(df, num_stats, cat_stats, dup, missing_cols, sens_cols, date_cols):
     """Generate 5-10 insights"""
@@ -98,12 +112,16 @@ def generate_insights(df, num_stats, cat_stats, dup, missing_cols, sens_cols, da
     
     if not num_stats.empty:
         num_stats['cv'] = num_stats['std'] / num_stats['mean'].abs()
-        top = num_stats.nlargest(1, 'cv').iloc[0]
-        insights.append(f"{top['column']}: highest variability (range: {top['min']:.1f} to {top['max']:.1f})")
+        # Only report variability if CV > 1 (high variability)
+        high_var = num_stats[num_stats['cv'] > 1.0].nlargest(1, 'cv')
+        if not high_var.empty:
+            top = high_var.iloc[0]
+            insights.append(f"{top['column']}: high variability (CV={top['cv']:.2f}), range: {top['min']:.1f} to {top['max']:.1f}")
         
         if num_stats['outlier_count'].sum() > 0:
             worst = num_stats.nlargest(1, 'outlier_percent').iloc[0]
-            insights.append(f"{worst['column']}: {worst['outlier_percent']:.1f}% outliers")
+            if worst['outlier_percent'] > 5:  # Only report if >5% outliers
+                insights.append(f"{worst['column']}: {worst['outlier_percent']:.1f}% outliers")
         
         try:
             skew = stats.skew(df[num_stats.iloc[0]['column']].dropna())
@@ -113,7 +131,11 @@ def generate_insights(df, num_stats, cat_stats, dup, missing_cols, sens_cols, da
     
     if not cat_stats.empty:
         top = cat_stats.nlargest(1, 'count').iloc[0]
-        insights.append(f"{top['column']}: '{top['value']}' dominates ({top['percent']:.1f}%)")
+        if top['percent'] > 10:  # Only report if actually dominant
+            insights.append(f"{top['column']}: '{top['value']}' dominates ({top['percent']:.1f}%)")
+        else:
+            n_unique = df[top['column']].nunique()
+            insights.append(f"{top['column']}: {n_unique} unique values, evenly distributed")
     
     # Correlation
     numeric_cols = df.select_dtypes(include='number').columns
@@ -122,8 +144,12 @@ def generate_insights(df, num_stats, cat_stats, dup, missing_cols, sens_cols, da
         corr_vals = corr.values.copy()
         np.fill_diagonal(corr_vals, 0)
         max_idx = np.unravel_index(np.abs(corr_vals).argmax(), corr_vals.shape)
-        if abs(corr_vals[max_idx]) > 0.5:
-            insights.append(f"Strong correlation ({corr_vals[max_idx]:.2f}): {corr.index[max_idx[0]]} <-> {corr.columns[max_idx[1]]}")
+        corr_val = corr_vals[max_idx]
+        # Only report if correlation is strong but not perfect (likely duplicate/derived variables)
+        if 0.5 < abs(corr_val) < 0.99:
+            insights.append(f"Strong correlation ({corr_val:.2f}): {corr.index[max_idx[0]]} <-> {corr.columns[max_idx[1]]}")
+        elif abs(corr_val) >= 0.99:
+            insights.append(f"Perfect correlation ({corr_val:.2f}): {corr.index[max_idx[0]]} and {corr.columns[max_idx[1]]} are likely duplicates/derived")
     
     if date_cols:
         dates = df[date_cols[0]].dropna()
@@ -137,6 +163,7 @@ def generate_insights(df, num_stats, cat_stats, dup, missing_cols, sens_cols, da
 
 def create_plots(df, numeric_cols, cat_cols, out_dir):
     """Generate visualizations"""
+    # Only create plots for meaningful numeric columns (already filtered by calc_stats)
     # Numeric plots
     for col in numeric_cols:
         s = df[col].dropna()
@@ -286,14 +313,14 @@ def process_csv(csv_path, schema_path=None, output_base="output"):
     print(f"✓ {len(numeric_cols)} numeric, {len(cat_cols)} categorical")
     
     # Stats
-    num_stats, cat_stats = calc_stats(df, numeric_cols, cat_cols)
+    num_stats, cat_stats, filtered_numeric = calc_stats(df, numeric_cols, cat_cols)
     dup = df.duplicated().sum()
     missing_cols = [c for c in df.columns if df[c].isna().mean() > 0.5]
     insights = generate_insights(df, num_stats, cat_stats, dup, missing_cols, sens_cols, date_cols)
     
     # Outputs
     print("✓ Generating plots...")
-    create_plots(df, numeric_cols, cat_cols, out_dir)
+    create_plots(df, filtered_numeric, cat_cols, out_dir)
     
     if not num_stats.empty:
         num_stats.to_csv(f"{out_dir}/numeric_stats.csv", index=False)
