@@ -42,7 +42,7 @@ brew install --cask mactex
 - Download Pandoc from https://pandoc.org/installing.html
 - Download MiKTeX from https://miktex.org/download
 
-**Running in Colab:**
+## Running in Colab
 1. Install system dependencies:
 ```bash
 !apt-get install pandoc texlive-xetex texlive-fonts-recommended texlive-latex-recommended -y
