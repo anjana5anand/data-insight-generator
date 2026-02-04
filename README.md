@@ -2,6 +2,8 @@
 
 **Names:** Anjana Anand and Sofie Appel
 
+[**Screen Recording**](https://drive.google.com/file/d/14jqBY8-fu6wzuPXrYUojQRiF5dgIeFcs/view?usp=sharing) 
+
 An intelligent exploratory data analysis system that automatically analyzes CSV datasets and generates comprehensive reports with statistics, visualizations, and actionable insights.
 
 ## Features
