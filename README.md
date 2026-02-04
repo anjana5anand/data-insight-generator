@@ -45,7 +45,8 @@ brew install --cask mactex
 ## Running in Colab
 1. Install system dependencies:
 ```bash
-!apt-get install pandoc texlive-xetex texlive-fonts-recommended texlive-latex-recommended -y
+!apt-get update
+!apt-get install -y pandoc texlive-latex-base texlive-latex-extra
 ```
 2. Install Python dependencies:
 ```bash
