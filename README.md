@@ -1,5 +1,7 @@
 # Automated EDA System
 
+**Names:** Anjana Anand and Sofie Appel
+
 An intelligent exploratory data analysis system that automatically analyzes CSV datasets and generates comprehensive reports with statistics, visualizations, and actionable insights.
 
 ## Features
