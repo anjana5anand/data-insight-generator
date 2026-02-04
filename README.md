@@ -58,7 +58,7 @@ files.upload()
 ```
 4. Run the script
 ```bash
-!python src/eda.py your_data.csv
+!python src/eda.py data.csv
 ```
 
 ## Usage
