@@ -1,7 +1,7 @@
 # GenAI Usage Log
 
 **Course**: Data Science EDA Assignment  
-**Student**: [Your Name]  
+**Student**: Anjana and Sofie
 **Tool Used**: Claude 3.5 Sonnet (Anthropic)  
 **Date**: February 2026
 
@@ -28,7 +28,7 @@ can you fix this code so the pdf file gives plots in them
 - Added YAML header with geometry settings
 - Changed `\pagebreak` to `\newpage` for better compatibility
 
-**What I Changed/Verified**:
+**What we Changed/Verified**:
 - Tested the PDF generation with pandoc
 - Verified that images now appear in the PDF
 - Confirmed image sizing works correctly
@@ -52,7 +52,7 @@ can this be automated to accept different documents or just one?
 - Added separate output directories per dataset
 - Implemented progress tracking
 
-**What I Changed/Verified**:
+**What we Changed/Verified**:
 - Tested with multiple CSV files
 - Verified no file overwrites occur
 - Confirmed error handling works for individual file failures
@@ -80,7 +80,7 @@ can you check if all are completed
   6. No date column detection
   7. No limitations/bias section
 
-**What I Changed/Verified**:
+**What we Changed/Verified**:
 - Reviewed the checklist thoroughly
 - Prioritized which features to implement
 - Decided to fix all high-priority issues
@@ -122,7 +122,7 @@ Generated complete production-ready version with:
    - Edge case handling (all-numeric, all-categorical datasets)
    - Better error messages and progress indicators
 
-**What I Changed/Verified**:
+**What we Changed/Verified**:
 
 ### Code Verification Process:
 1. **Schema Support**:
@@ -180,7 +180,7 @@ Generated complete production-ready version with:
 
 ## Key Code Modifications I Made
 
-While Claude generated the bulk of the code, I made several important modifications:
+While Claude generated the bulk of the code, we made several important modifications:
 
 1. **Adjusted Insight Thresholds**:
    - Changed cardinality threshold from 0.9 to 0.95 for better sensitivity detection
@@ -226,7 +226,7 @@ While Claude generated the bulk of the code, I made several important modificati
 
 ---
 
-## What Claude Did vs What I Did
+## What Claude Did vs What we Did
 
 ### Claude Generated:
 - 95% of the code structure and implementation
@@ -235,7 +235,7 @@ While Claude generated the bulk of the code, I made several important modificati
 - Visualization code
 - Error handling logic
 
-### I Did:
+### We Did:
 - Reviewed every line of code for correctness
 - Tested all functionality thoroughly
 - Modified thresholds and parameters based on my understanding
@@ -244,29 +244,6 @@ While Claude generated the bulk of the code, I made several important modificati
 - Tested edge cases
 - Validated against assignment requirements
 - Made final adjustments for my specific use case
-
----
-
-## Lessons Learned
-
-1. **GenAI Strengths**:
-   - Excellent at generating boilerplate code
-   - Great for documentation writing
-   - Good at suggesting comprehensive feature sets
-   - Helpful for identifying edge cases
-
-2. **GenAI Limitations**:
-   - Cannot test code in real environments
-   - Needs human verification for statistical correctness
-   - May miss domain-specific requirements
-   - Cannot determine appropriate thresholds without context
-
-3. **Best Practices**:
-   - Always verify generated code
-   - Test with real data
-   - Cross-reference statistical methods
-   - Understand every line before submitting
-   - Use GenAI as a productivity tool, not a replacement for learning
 
 ---
 
