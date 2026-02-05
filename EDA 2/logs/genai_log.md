@@ -28,7 +28,7 @@ can you fix this code so the pdf file gives plots in them
 - Added YAML header with geometry settings
 - Changed `\pagebreak` to `\newpage` for better compatibility
 
-**What we Changed/Verified**:
+**What We Changed/Verified**:
 - Tested the PDF generation with pandoc
 - Verified that images now appear in the PDF
 - Confirmed image sizing works correctly
@@ -52,7 +52,7 @@ can this be automated to accept different documents or just one?
 - Added separate output directories per dataset
 - Implemented progress tracking
 
-**What we Changed/Verified**:
+**What We Changed/Verified**:
 - Tested with multiple CSV files
 - Verified no file overwrites occur
 - Confirmed error handling works for individual file failures
@@ -80,7 +80,7 @@ can you check if all are completed
   6. No date column detection
   7. No limitations/bias section
 
-**What we Changed/Verified**:
+**What We Changed/Verified**:
 - Reviewed the checklist thoroughly
 - Prioritized which features to implement
 - Decided to fix all high-priority issues
@@ -122,7 +122,7 @@ Generated complete production-ready version with:
    - Edge case handling (all-numeric, all-categorical datasets)
    - Better error messages and progress indicators
 
-**What we Changed/Verified**:
+**What We Changed/Verified**:
 
 ### Code Verification Process:
 1. **Schema Support**:
@@ -178,7 +178,7 @@ Generated complete production-ready version with:
 
 ---
 
-## Key Code Modifications I Made
+## Key Code Modifications We Made
 
 While Claude generated the bulk of the code, we made several important modifications:
 
@@ -226,7 +226,7 @@ While Claude generated the bulk of the code, we made several important modificat
 
 ---
 
-## What Claude Did vs What we Did
+## What Claude Did vs What We Did
 
 ### Claude Generated:
 - 95% of the code structure and implementation
@@ -256,7 +256,7 @@ Claude AI significantly accelerated development of this EDA system, reducing wha
 - Test thoroughly
 - Make informed modifications
 
-All final code has been reviewed and tested. I can explain and defend every line of the implementation.
+All final code has been reviewed and tested. We can explain and defend every line of the implementation.
 
 ---
 
